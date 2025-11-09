@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const pingUrl = 'https://evolution-api-nl1d.onrender.com/healthz';
+const pingUrl = 'https://evolution-api-v759.onrender.com/healthz';
 
 export async function doPing() {
   try {
