@@ -10,29 +10,15 @@ if [[ "$DATABASE_PROVIDER" == "postgresql" || "$DATABASE_PROVIDER" == "mysql" ||
     export DATABASE_URL
     echo "Deploying migrations for $DATABASE_PROVIDER"
     echo "Database URL: $DATABASE_URL"
-
-    if [ "$DOCKER_ENV" = "true" ]; then
-        # Em produção (Docker/Render), usar migrate deploy diretamente
-        echo "Running in production mode - using direct migrate deploy"
-
-        # Primeiro, tentar resetar o banco se houver migrações falhadas
-        echo "Resetting database state..."
-        npx prisma migrate reset --force --schema ./prisma/$DATABASE_PROVIDER-schema.prisma || true
-
-        # Depois executar deploy normalmente
-        npx prisma migrate deploy --schema ./prisma/$DATABASE_PROVIDER-schema.prisma
-    else
-        # Em desenvolvimento, usar o script normal
-        npm run db:deploy
-    fi
-
+    # rm -rf ./prisma/migrations
+    # cp -r ./prisma/$DATABASE_PROVIDER-migrations ./prisma/migrations
+    npm run db:deploy
     if [ $? -ne 0 ]; then
         echo "Migration failed"
         exit 1
     else
         echo "Migration succeeded"
     fi
-
     npm run db:generate
     if [ $? -ne 0 ]; then
         echo "Prisma generate failed"
